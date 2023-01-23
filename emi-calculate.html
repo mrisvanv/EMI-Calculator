@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>EMI Calculator</title>
+  </head>
+  <body>
+
+    <h1>EMI Calculator</h1>
+
+    <div>
+  <p>This calculator is used to calculate the EMI (Equated Monthly Installment) for a loan. Please enter the principal amount, interest rate, and loan term in the fields provided.</p>
+  <p>In the principal amount field, you can use "L" to represent Lakh (eg. 10L represents 10 Lakhs), "T" to represent Thousand (eg. 2T represents 2 Thousand), "H" to represent Hundred (eg. 5H represents 500) </p>
+  <p>In the term field, you can use "Y" to represent Year (eg. 2Y represents 2 Years), if there is no "Y" in the term field, it means that the term is in months (eg. 36 represents 36 months).</p>
+</div>
+<form>
+  <label for="principal">Principal Amount:</label>
+  <input type="text" id="principal" name="principal"><br>
+  <label for="rate">Interest Rate:</label>
+  <input type="text" id="rate" name="rate"><br>
+  <label for="term">Loan Term:</label>
+  <input type="text" id="term" name="term"><br>
+  <input type="button" value="Calculate EMI" onclick="calculateEMI()"><br>
+</form>
+<p id="output"></p>
+<p id="total-interest"></p>
+<p id="total-amount"></p>
+    <script>
+  function calculateEMI() {
+    var principal = document.getElementById("principal").value;
+    principal = principal.replace("L", "00000").replace("T", "000").replace("H", "100");
+    principal = parseFloat(principal);
+    var rate = document.getElementById("rate").value;
+    var term = document.getElementById("term").value;
+    if(term.indexOf("Y") != -1){
+      term = term.replace("Y", "");
+      term = parseFloat(term);
+      term = term * 12;
+    } else {
+      term = parseFloat(term);
+    }
+    var r = rate / (12 * 100);
+    var emi = (principal * r * Math.pow(1 + r, term)) / (Math.pow(1 + r, term) - 1);
+    var totalInterest = emi * term - principal;
+    var totalAmount = principal + totalInterest;
+    var options = { style: 'currency', currency: 'INR' };
+    document.getElementById("output").innerHTML = "Your EMI is " + emi.toLocaleString('en-IN', options);
+    document.getElementById("total-interest").innerHTML = "Total Interest to be paid is " + totalInterest.toLocaleString('en-IN', options);
+    document.getElementById("total-amount").innerHTML = "Total Amount to be paid is " + totalAmount.toLocaleString('en-IN', options);
+  }
+    </script>
+
+  </body>
+</html>
